@@ -1,4 +1,4 @@
--- Script Nghe Nhạc Delta Executor (Đã cập nhật chuẩn thời lượng từ YouTube)
+-- Script Nghe Nhạc Delta Executor (Đã cập nhật chuẩn thời lượng, Nút Tua & Nút Loop)
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -20,7 +20,7 @@ if not sound then
     sound = Instance.new("Sound")
     sound.Name = "DeltaMusicPlayer"
     sound.Volume = 2.5 -- Mặc định 250%
-    sound.Looped = true
+    sound.Looped = true -- Mặc định bật loop
     sound.Parent = game:GetService("SoundService")
 end
 
@@ -130,6 +130,45 @@ MainTab:CreateButton({
    end,
 })
 
+-- Nút Chuyển đổi Vòng lặp (Loop Play)
+local loopButton
+loopButton = MainTab:CreateButton({
+   Name = sound.Looped and "🔁 Vòng lặp (Loop): BẬT" or "🔁 Vòng lặp (Loop): TẮT",
+   Callback = function()
+      sound.Looped = not sound.Looped
+      if sound.Looped then
+          loopButton:Set("🔁 Vòng lặp (Loop): BẬT")
+          Rayfield:Notify({Title = "🔁 Loop Play", Content = "Đã BẬT lặp lại vô hạn bài hát!"})
+      else
+          loopButton:Set("🔁 Vòng lặp (Loop): TẮT")
+          Rayfield:Notify({Title = "➡️ Loop Play", Content = "Đã TẮT lặp lại (Hết bài sẽ dừng)."})
+      end
+   end,
+})
+
+-- Các Nút Tua Nhạc
+MainTab:CreateButton({
+   Name = "⏪ Tua lùi 10s",
+   Callback = function()
+      if sound.IsPlaying or sound.IsPaused then
+          local newTime = math.max(0, sound.TimePosition - 10)
+          sound.TimePosition = newTime
+          Rayfield:Notify({Title = "⏪ Tua lùi", Content = "Đã tua lùi 10 giây."})
+      end
+   end,
+})
+
+MainTab:CreateButton({
+   Name = "⏩ Tua tới 10s",
+   Callback = function()
+      if sound.IsPlaying or sound.IsPaused then
+          local newTime = math.min(sound.TimeLength, sound.TimePosition + 10)
+          sound.TimePosition = newTime
+          Rayfield:Notify({Title = "⏩ Tua tới", Content = "Đã tua tới 10 giây."})
+      end
+   end,
+})
+
 -- Thanh Slider âm lượng
 MainTab:CreateSlider({
    Name = "🔊 Âm lượng (Tối đa 500%)",
@@ -150,9 +189,7 @@ MainTab:CreateLabel("⚠️ thời lượng video càng dài thì càng đợi l
 
 KhongBuongTab:CreateSection("🔥 Các Bản Remix / Remake Không Buông")
 
--- Bản 1: KHONG//BUONG prod. HYZØ (3:21)
 local LINK_HYZO = "https://files.catbox.moe/zjcbj5.mp3"
-
 KhongBuongTab:CreateButton({
    Name = "🔊 KHONG//BUONG prod. HYZØ (Không Buông x Hoodtrap) [3:21]",
    Callback = function()
@@ -160,9 +197,7 @@ KhongBuongTab:CreateButton({
    end,
 })
 
--- Bản 2: Jerk Drill Type Beat Prod DAIFU (2:29)
 local LINK_DAIFU = "https://files.catbox.moe/tth698.mp3"
-
 KhongBuongTab:CreateButton({
    Name = "🎹 [FREE] JERK DRILL TYPE BEAT - 'KHÔNG BUÔNG - Hngle ft. Ari' | Prod DAIFU [2:29]",
    Callback = function()
@@ -170,9 +205,7 @@ KhongBuongTab:CreateButton({
    end,
 })
 
--- Bản 3: Jerk Drill Rmx Prod.Hades (3:29)
 local LINK_JERK_DRILL = "https://files.catbox.moe/wgxrqm.mp3"
-
 KhongBuongTab:CreateButton({
    Name = "⚡ Hngle - KHÔNG BUÔNG ft. Ari | ( Jerk Drill Rmx ) Prod.Hades [3:29]",
    Callback = function()
@@ -180,9 +213,7 @@ KhongBuongTab:CreateButton({
    end,
 })
 
--- Bản 4: Hoodtrap x Pluggnb (2:58)
 local LINK_HOODTRAP = "https://files.catbox.moe/twrr60.mp3"
-
 KhongBuongTab:CreateButton({
    Name = "🎹 KHÔNG BUÔNG - Hngle ft. Ari | hoodtrap x pluggnb [2:58]",
    Callback = function()
@@ -196,9 +227,7 @@ KhongBuongTab:CreateButton({
 
 TimEmTab:CreateSection("✨ Các Bản Remix / Remake Tìm Em")
 
--- Bản 1: Drill Type Beat Prod DAIFU (3:29)
 local LINK_TIM_EM_DAIFU = "https://files.catbox.moe/gon9r1.mp3"
-
 TimEmTab:CreateButton({
    Name = "🎹 [FREE] tìm em.wav - Hngle ft. Bảo Anh | Prod DAIFU - Drill Type Beat [3:29]",
    Callback = function()
@@ -206,9 +235,7 @@ TimEmTab:CreateButton({
    end,
 })
 
--- Bản 2: Remake HoodTrap @THANGNGUYEN-18 (3:48)
 local LINK_TIM_EM_HOODTRAP = "https://files.catbox.moe/5vt8zh.mp3"
-
 TimEmTab:CreateButton({
    Name = "🔥 TÌM EM | Hngle ft Bảo Anh remake HoodTrap [3:48]",
    Callback = function()
@@ -216,9 +243,7 @@ TimEmTab:CreateButton({
    end,
 })
 
--- Bản 3: Hoodtrap, Jerk Drill Prod LOWTERPER (3:56)
 local LINK_TIM_EM_LOWTERPER = "https://files.catbox.moe/6r3i5s.mp3"
-
 TimEmTab:CreateButton({
    Name = "⚡ TÌM EM - Hngle ft Bảo Anh - (HOODTRAP, JERK DRILL) | PROD BY LOWTERPER [3:56]",
    Callback = function()
@@ -226,9 +251,7 @@ TimEmTab:CreateButton({
    end,
 })
 
--- Bản 4: Zenzy Remix (4:10)
 local LINK_TIM_EM_ZENZY = "https://files.catbox.moe/g2qk7t.mp3"
-
 TimEmTab:CreateButton({
    Name = "🎧 Tìm Em ( Zenzy Remix ) [4:10]",
    Callback = function()
@@ -242,9 +265,7 @@ TimEmTab:CreateButton({
 
 MashupTab:CreateSection("🔀 Các Bản Mashup / Beat Tay")
 
--- Bản 1: NHAC VIET BEAT TAY #6 - GAZ (18:08)
 local LINK_GAZ_BEATTAY = "https://files.catbox.moe/zeh200.mp3"
-
 MashupTab:CreateButton({
    Name = "🎧 NHAC VIET BEAT TAY #6 - GAZ [18:08]",
    Callback = function()
@@ -252,9 +273,7 @@ MashupTab:CreateButton({
    end,
 })
 
--- Bản 2: Tìm Em X Túy Âm (3:07)
 local LINK_MASHUP_TUY_AM = "https://files.catbox.moe/pzj4xw.mp3"
-
 MashupTab:CreateButton({
    Name = "🔥 Tìm Em X Túy Âm |Hoodtrap x Drill| [3:07]",
    Callback = function()
